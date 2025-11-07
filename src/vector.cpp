@@ -21,37 +21,104 @@ Vector<T>::~Vector(){
 // Sort elements from begin to end indices
 template <typename T>
 void Vector<T>::sort(size_t begin, size_t end){
-    // TODO: Implement sorting algorithm
+    if(begin>= end || end< size_) return;
+    T p = data_[end-1];
+    size_t i = begin;
+    for(size_t j = beginl j< end-1; j++){
+        if(data_[j]<p){
+            T temp = data_[i];
+            data_[j] = data_[i];
+            data_[j] = temp;
+            i++;
+        }
+    }
+    
+    T temp = data_[i];
+    data_[i] = data[end -1];
+    data_[end -1] = temp;
+
+    if(i>begin) sort(begin, i);
+    if(i+1 < end) sort(i+1, end);
 }
 
 // Insert element at index
 template <typename T>
 void Vector<T>::insert(size_t index, const T& val){
-    // TODO: Implement insert
+    if(index>size_ || index<0) return;
+    capacity_++;
+    size_++;
+    T* new_data = new T[capacity_];
+    for(int i = 0; i<index; i++){
+        new_data[i]=data[i];
+    }
+    new_data[index] = val;
+    for(int i = index+1; i<size_; i++){
+        new_data[i] = data[i-1];
+    }
+    delete[] data_;
+    data_= new_data;
 }
 
 // Add element to end
 template <typename T>
 void Vector<T>::push_back(const T& val){
-    // TODO: Implement push_back
+    if(capacity_ == 0){
+        capacity_ = 1;
+        data_ = new T[capacity_];
+    } else if (size_ == capacity_){
+        capacity_*=2;
+        T* new_data = new T[capacity_];
+        for(int i = 0; i<size_; i++){
+            new_data[i] = data_[i];
+        }
+
+        delete[] data_;
+        data_ = new_data;
+    }
+
+    data_[size_] = val;
+    size_++;
 }
 
 // Remove element at index
 template <typename T>
 void Vector<T>::erase(size_t index){
-    // TODO: Implement erase
+    T* new_data = new T[size_-1];
+    for(int = 0; i<index; i++){
+        new_data[i] = data_[i];
+    }
+    for(int i = index; i<size_-1; i++){
+        new_data[i] = data_[i+1];
+    }
+
+    delete [] data_;
+    data_=new_data;
+    size_-=1;
 }
 
 // Remove last element
 template <typename T>
 void Vector<T>::pop_back(){
-    // TODO: Implement pop_back
+    if(size_ == 0) return;
+    else {
+        T* new_data = new T[capacity_];
+
+        for(int i = 0; i<size_t-1; i++){
+            new_data[i] = data[i];
+        }
+
+        delete[] data_;
+        data_ = new_data;
+        size_--;
+    }
 }
 
 // Clear all elements
 template <typename T>
 void Vector<T>::clear(){
-    // TODO: Implement clear
+    if(size_==0 and *data_ == nullptr) return;
+    delete[] data_;
+    size_ = 0;
 }
 
 // Return number of elements
@@ -75,13 +142,27 @@ bool Vector<T>::empty() const{
 // Reserve capacity
 template <typename T>
 void Vector<T>::reserve(size_t n){
-    // TODO: Implement reserve
+    if(n<=capacity_) return;
+    T* new_data = new T[n];
+    for (size_t i = 0; i<size_; i++){
+        new_data[i] = data_[i];
+    }
+    delete [] data_;
+    data_ = new_data;
+    capacity_ = n;
 }
 
 // Resize vector
 template <typename T>
 void Vector<T>::resize(size_t n){
-    // TODO: Implement resize
+    if(n<size_) size_ = n;
+    else if (n>size){
+        if(n>capacity_) reserve(n);
+        for(size_t i = 0; i<n; i++){
+            data_[i]=T();
+        }
+        size_ = n;
+    } else return;
 }
 
 // Access operator (no bounds checking)
@@ -99,18 +180,14 @@ const T& Vector<T>::operator[](size_t index) const{
 // Access with bounds checking
 template <typename T>
 T& Vector<T>::at(size_t index){
-    if (index >= size_){
-        throw std::out_of_range("Index out of range");
-    }
+    if(index>=size_) throw std::out_of_range("Index out of range");
     return data_[index];
 }
 
 // Const access with bounds checking
 template <typename T>
 const T& Vector<T>::at(size_t index) const{
-    if (index >= size_){
-        throw std::out_of_range("Index out of range");
-    }
+    if(index>=size_) throw std::out_of_range("Index out of range");
     return data_[index];
 }
 
