@@ -1,4 +1,3 @@
-#include "vector.h"
 #include <cstddef>
 #include <stdexcept>
 
@@ -21,20 +20,20 @@ Vector<T>::~Vector(){
 // Sort elements from begin to end indices
 template <typename T>
 void Vector<T>::sort(size_t begin, size_t end){
-    if(begin>= end || end< size_) return;
+    if(begin>= end || end > size_) return;
     T p = data_[end-1];
     size_t i = begin;
-    for(size_t j = beginl j< end-1; j++){
+    for(size_t j = begin; j< end-1; j++){
         if(data_[j]<p){
             T temp = data_[i];
-            data_[j] = data_[i];
+            data_[i] = data_[j];
             data_[j] = temp;
             i++;
         }
     }
     
     T temp = data_[i];
-    data_[i] = data[end -1];
+    data_[i] = data_[end -1];
     data_[end -1] = temp;
 
     if(i>begin) sort(begin, i);
@@ -49,11 +48,11 @@ void Vector<T>::insert(size_t index, const T& val){
     size_++;
     T* new_data = new T[capacity_];
     for(int i = 0; i<index; i++){
-        new_data[i]=data[i];
+        new_data[i]=data_[i];
     }
     new_data[index] = val;
     for(int i = index+1; i<size_; i++){
-        new_data[i] = data[i-1];
+        new_data[i] = data_[i-1];
     }
     delete[] data_;
     data_= new_data;
@@ -84,7 +83,7 @@ void Vector<T>::push_back(const T& val){
 template <typename T>
 void Vector<T>::erase(size_t index){
     T* new_data = new T[size_-1];
-    for(int = 0; i<index; i++){
+    for(int i = 0; i<index; i++){
         new_data[i] = data_[i];
     }
     for(int i = index; i<size_-1; i++){
@@ -103,8 +102,8 @@ void Vector<T>::pop_back(){
     else {
         T* new_data = new T[capacity_];
 
-        for(int i = 0; i<size_t-1; i++){
-            new_data[i] = data[i];
+        for(int i = 0; i<size_-1; i++){
+            new_data[i] = data_[i];
         }
 
         delete[] data_;
@@ -116,9 +115,10 @@ void Vector<T>::pop_back(){
 // Clear all elements
 template <typename T>
 void Vector<T>::clear(){
-    if(size_==0 and *data_ == nullptr) return;
     delete[] data_;
+    data_ = nullptr;
     size_ = 0;
+    capacity_ = 0;
 }
 
 // Return number of elements
@@ -156,7 +156,7 @@ void Vector<T>::reserve(size_t n){
 template <typename T>
 void Vector<T>::resize(size_t n){
     if(n<size_) size_ = n;
-    else if (n>size){
+    else if (n>size_){
         if(n>capacity_) reserve(n);
         for(size_t i = 0; i<n; i++){
             data_[i]=T();
